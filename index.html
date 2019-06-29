@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function computerPlay() {
+            let options = ['Rock','Paper','Scissors'];
+            return options[Math.floor(Math.random() * options.length)];
+        }
+        
+        function userPlay() {
+            let userChoice = prompt("What's your choice?");
+            userChoice = userChoice.charAt(0).toUpperCase() + userChoice.slice(1).toLowerCase();
+            return userChoice            
+        }
+        
+        function play(computerChoice, userChoice) {
+            switch(userChoice) {
+                case computerChoice:
+                    return "It's a draw!";
+                case "Paper":
+                    return computerChoice === "Rock"? "You win! Paper beats Rocks!": "You lose! Scissors beats Paper!";
+                case "Rock":
+                    return computerChoice === "Scissors"? "You win! Rocks beats Scissors!": "You lose! Paper beats Rocks!";
+                case "Scissors":
+                    return computerChoice === "Paper"? "You win! Scissors beats Paper!": "You lose! Rocks beats Scissors!";
+                default:
+                    return "Rock, paper or scissors? Try again";
+            };
+        };
+
+        function game() {
+            let playerScore = 0;
+            let computerScore = 0;
+            while(playerScore < 3 && computerScore < 3) {
+                computerChoice = computerPlay()
+                userChoice = userPlay()
+                let result = play(computerChoice,userChoice);
+                alert(result);
+                switch(result.charAt(4)) {
+                    case 'w': 
+                        playerScore += 1;
+                        break;
+                    case 'l': 
+                        computerScore += 1;
+                        break;
+                }
+                alert(`Player:${playerScore} PC:${computerScore}`);
+            }
+
+            alert('End game! Thank you for playing.')
+        }
+
+        game()
+
+    </script>
+</body>
+</html>
