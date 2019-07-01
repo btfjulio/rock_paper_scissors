@@ -4,45 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
     <title>Document</title>
 </head>
 <body>
+
+
+    <div class="main">
+        <div>
+            <h1 id="score">Player: 0 - PC:0</h1>
+        </div>
+        <div class="buttons">
+            <button class="btn-options" value="Rock">Rock</button>
+            <button class="btn-options" value="Paper">Paper</button>
+            <button class="btn-options" value="Scissors">Scissors</button>
+        </div>
+    </div>
+
+
     <script>
+
+                
+        function play(event) {
+            userChoice = event.target.innerText
+            computerChoice = computerPlay()
+            let result = game(computerChoice,userChoice);
+            alert(result);
+            return score(result);
+        }
+
         function computerPlay() {
             let options = ['Rock','Paper','Scissors'];
             return options[Math.floor(Math.random() * options.length)];
         }
         
-        function userPlay() {
-            let userChoice = prompt("What's your choice?");
-            userChoice = userChoice.charAt(0).toUpperCase() + userChoice.slice(1).toLowerCase();
-            return userChoice            
-        }
-        
-        function play(computerChoice, userChoice) {
+        function game(computerChoice, userChoice) {
             switch(userChoice) {
                 case computerChoice:
-                    return "It's a draw!";
+                    return "It's a draw! No one gets points.";
                 case "Paper":
                     return computerChoice === "Rock"? "You win! Paper beats Rocks!": "You lose! Scissors beats Paper!";
                 case "Rock":
                     return computerChoice === "Scissors"? "You win! Rocks beats Scissors!": "You lose! Paper beats Rocks!";
                 case "Scissors":
                     return computerChoice === "Paper"? "You win! Scissors beats Paper!": "You lose! Rocks beats Scissors!";
-                default:
-                    return "Rock, paper or scissors? Try again";
             };
         };
 
-        function game() {
-            let playerScore = 0;
-            let computerScore = 0;
-            while(playerScore < 3 && computerScore < 3) {
-                computerChoice = computerPlay()
-                userChoice = userPlay()
-                let result = play(computerChoice,userChoice);
-                alert(result);
-                switch(result.charAt(4)) {
+        function score(result) {            
+            switch(result.charAt(4)) {
                     case 'w': 
                         playerScore += 1;
                         break;
@@ -50,13 +60,46 @@
                         computerScore += 1;
                         break;
                 }
-                alert(`Player:${playerScore} PC:${computerScore}`);
-            }
-
-            alert('End game! Thank you for playing.')
+            updateScore(playerScore, computerScore);
+            if (playerScore >= 2 || computerScore >= 2) {
+                return endGame(playerScore,computerScore);
+            };            
         }
 
-        game()
+        function updateScore(playerScore,computerScore) {
+            scoreDisplay.textContent = `Player: ${playerScore} - PC:${computerScore}`;
+        }
+
+        function endGame(playerScore,computerScore) {
+            let winner = Math.max(playerScore, computerScore);
+            switch(winner) {
+                case playerScore: 
+                    alert('You win! Congrats, you are Rock, Paper and Scissors Master!') ;
+                    return newGame();
+                case computerScore: 
+                    alert('You lose, better lucky next time!') ;
+                    return newGame();
+            }
+        }
+
+        function newGame() {
+            playerScore = 0;
+            computerScore = 0;
+            updateScore(playerScore, computerScore);
+        }
+
+        let playerScore = 0;
+        let computerScore = 0;
+
+        let scoreDisplay = document.querySelector('#score');
+        
+        const options = document.querySelectorAll('.btn-options');
+        options.forEach(option => {
+            option.addEventListener('click',(event) => play(event))
+        });
+
+
+        
 
     </script>
 </body>
